@@ -24,9 +24,16 @@ public class ProProductService {
     private final ProProductEntityService proProductEntityService;
     private final ProProductTypeEntityService proProductTypeEntityService;
 
+
+    public List<ProProductDto> findAllProducts(){
+        List<ProProduct> proProductList = proProductEntityService.findAll();
+        List<ProProductDto> proProductDtoList = ProProductMapperConverter.INSTANCE.convertToProProductDtoListFromProProductList(proProductList);
+        return proProductDtoList;
+    }
+
     public ProProductDto saveProduct(ProProductSaveDto proProductSaveDto){
-        validationOfProductPrice(proProductSaveDto.getBasicProductPrice());
         ProProduct proProduct = ProProductMapperConverter.INSTANCE.convertToProProductFromProProductSaveDto(proProductSaveDto);
+        validationOfProductPrice(proProductSaveDto.getBasicProductPrice());
         proProduct.setProductPriceWithTax(calculatePriceWithKdvTax(proProductSaveDto));
         proProduct.setTaxRate(proProduct.getProductPriceWithTax().subtract(proProduct.getBasicProductPrice()));
         proProduct = proProductEntityService.save(proProduct);
@@ -35,7 +42,7 @@ public class ProProductService {
         return proProductDto;
     }
 
-    private BigDecimal calculatePriceWithKdvTax(ProProductSaveDto proProductSaveDto){
+    public BigDecimal calculatePriceWithKdvTax(ProProductSaveDto proProductSaveDto){
 
         Long productTypeId = proProductSaveDto.getProductTypeId();
         BigDecimal percentage = BigDecimal.valueOf(100);
@@ -50,14 +57,6 @@ public class ProProductService {
 
         return newProductPrice;
     }
-
-
-    public List<ProProductDto> findAllProducts(){
-        List<ProProduct> proProductList = proProductEntityService.findAll();
-        List<ProProductDto> proProductDtoList = ProProductMapperConverter.INSTANCE.convertToProProductDtoListFromProProductList(proProductList);
-        return proProductDtoList;
-    }
-
 
     public List<ProProductDto> findByProductTypeId(Long id){
         List<ProProduct> proProductList = proProductEntityService.findByProductTypeId(id);
@@ -103,13 +102,14 @@ public class ProProductService {
         proProductEntityService.delete(proProduct);
     }
 
+    //TODO:rename method
     public List<ProProductDto> findAllProducts(BigDecimal firstPrice, BigDecimal secondPrice){
        List<ProProduct> proProductList = proProductEntityService.findAllByProductPricesBetween(firstPrice, secondPrice);
        List<ProProductDto> proProductDtoList = ProProductMapperConverter.INSTANCE.convertToProProductDtoListFromProProductList(proProductList);
        return proProductDtoList;
     }
 
-    private boolean validationOfProductPrice(BigDecimal productPrice) {
+    public boolean validationOfProductPrice(BigDecimal productPrice) {
         if(productPrice.compareTo(BigDecimal.ZERO) > 0){
             return true;
         }else{

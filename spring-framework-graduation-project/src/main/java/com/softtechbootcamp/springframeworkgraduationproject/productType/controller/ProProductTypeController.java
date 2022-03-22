@@ -33,8 +33,8 @@ public class ProProductTypeController {
     }
 
     @PatchMapping
-    public ResponseEntity updateKdvRateOfProductType(@RequestParam String productTypeName, @RequestParam BigDecimal kdvRate){
-        ProProductTypeDto proProductTypeDto = proProductTypeService.updateKdvRateOfProductType(productTypeName, kdvRate);
+    public ResponseEntity updateKdvRateOfProductType(@RequestParam String productTypeName, @RequestParam BigDecimal taxRate){
+        ProProductTypeDto proProductTypeDto = proProductTypeService.updateKdvRateOfProductType(productTypeName, taxRate);
         return ResponseEntity.ok(RestResponse.of(proProductTypeDto));
     }
 }

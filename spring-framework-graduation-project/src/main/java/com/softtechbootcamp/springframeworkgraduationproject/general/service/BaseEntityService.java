@@ -80,7 +80,7 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
         if(entityOptional.isPresent()){
             entity = entityOptional.get();
         }else{
-            throw new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND);
+            throw new ItemNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND);
         }
 
         return entity;

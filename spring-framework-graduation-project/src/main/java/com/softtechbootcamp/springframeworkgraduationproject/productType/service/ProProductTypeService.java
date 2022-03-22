@@ -50,7 +50,7 @@ public class ProProductTypeService {
         }
     }
 
-    private boolean validationOfTaxRate(BigDecimal taxRate) {
+    public Boolean validationOfTaxRate(BigDecimal taxRate) {
         if(taxRate.compareTo(BigDecimal.ZERO) > 0){
             return true;
         }else{
