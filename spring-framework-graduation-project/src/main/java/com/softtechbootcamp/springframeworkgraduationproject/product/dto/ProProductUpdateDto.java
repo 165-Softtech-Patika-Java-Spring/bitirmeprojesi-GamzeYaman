@@ -1,6 +1,5 @@
 package com.softtechbootcamp.springframeworkgraduationproject.product.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,11 +7,9 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Builder
-public class ProProductSaveDto {
+public class ProProductUpdateDto {
+    private Long id;
     private String productName;
     private BigDecimal basicProductPrice;
     private Long productTypeId;
-
-
 }

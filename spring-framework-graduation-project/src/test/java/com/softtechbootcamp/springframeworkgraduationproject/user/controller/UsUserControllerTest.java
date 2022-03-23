@@ -85,6 +85,17 @@ class UsUserControllerTest extends BaseTest {
         boolean isSuccess = isSuccess(result);
 
         assertTrue(isSuccess);
+    }
 
+    @Test
+    void shouldNotDeleteWhenUserIdDoesNotExist() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                delete(BASE_PATH + "/9999").content("9999").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
     }
 }

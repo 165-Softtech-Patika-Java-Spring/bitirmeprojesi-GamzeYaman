@@ -1,8 +1,5 @@
 package com.softtechbootcamp.springframeworkgraduationproject.productType.dao;
 
-import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductDto;
-import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductTypeDetails;
-import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductTypeDto;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.entity.ProProductType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

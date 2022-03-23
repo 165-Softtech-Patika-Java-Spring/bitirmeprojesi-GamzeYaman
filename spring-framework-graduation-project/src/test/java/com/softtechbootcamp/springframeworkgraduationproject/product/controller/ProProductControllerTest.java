@@ -41,8 +41,6 @@ class ProProductControllerTest extends BaseTest {
         this.objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
-
-
     @Test
     void shouldFindAllProducts() throws Exception {
 
@@ -83,9 +81,8 @@ class ProProductControllerTest extends BaseTest {
         assertTrue(isSuccess);
     }
 
-    //TODO:rename method
     @Test
-    void getProductPrice() throws Exception {
+    void getProductBetweenTwoPrices() throws Exception {
 
         MvcResult result = mockMvc.perform(
                 get(BASE_PATH+ "/between-prices?firstPrice=5&secondPrice=50000").content("").contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +112,6 @@ class ProProductControllerTest extends BaseTest {
         assertTrue(isSuccess);
     }
 
-
     @Test
     void shouldUpdateProductPrice() throws Exception {
         MvcResult result = mockMvc.perform(
@@ -141,7 +137,7 @@ class ProProductControllerTest extends BaseTest {
     }
 
     @Test
-    void shouldNoDeleteWhenIdDoesNotExist() throws Exception {
+    void shouldNotDeleteWhenIdDoesNotExist() throws Exception {
 
         MvcResult result = mockMvc.perform(
                 delete(BASE_PATH + "/9999").content("9999").contentType(MediaType.APPLICATION_JSON)

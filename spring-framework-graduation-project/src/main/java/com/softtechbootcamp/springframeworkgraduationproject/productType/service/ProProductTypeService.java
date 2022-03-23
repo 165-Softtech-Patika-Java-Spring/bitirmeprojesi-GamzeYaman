@@ -13,23 +13,28 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 public class ProProductTypeService {
     private final ProProductTypeEntityService proProductTypeEntityService;
 
+    /* Product type is saved with type name and tax rate. Product type cannot be saved with same type name, so it has to be unique.*/
     public ProProductTypeDto saveProductType(ProProductTypeSaveDto proProductTypeSaveDto){
         isProductTypeNameExist(proProductTypeSaveDto.getProductTypeName());
         validationOfTaxRate(proProductTypeSaveDto.getTaxRate());
         ProProductType proProductType = ProProductTypeMapperConverter.INSTANCE.convertToProProductTypeFromProProductTypeSaveDto(proProductTypeSaveDto);
+        proProductType.setProductTypeName(proProductTypeSaveDto.getProductTypeName().toUpperCase(Locale.ROOT));
+        proProductType.setTaxRate(proProductTypeSaveDto.getTaxRate());
         proProductType = proProductTypeEntityService.save(proProductType);
 
         ProProductTypeDto proProductTypeDto = ProProductTypeMapperConverter.INSTANCE.convertToProProductTypeDtoFromProProductType(proProductType);
         return proProductTypeDto;
     }
 
-    public ProProductTypeDto updateKdvRateOfProductType(String productTypeName, BigDecimal taxRate){
+    /* Updating product type tax rate by using unique product type name. */
+    public ProProductTypeDto updateTaxRateOfProductType(String productTypeName, BigDecimal taxRate){
         validationOfTaxRate(taxRate);
         ProProductType proProductType = proProductTypeEntityService.update(productTypeName, taxRate);
         ProProductTypeDto proProductTypeDto = ProProductTypeMapperConverter.INSTANCE.convertToProProductTypeDtoFromProProductType(proProductType);
@@ -41,8 +46,10 @@ public class ProProductTypeService {
         return proProductDetails;
     }
 
+    /* Validation process about product type name is used or not. Name was converted to uppercase because of saving style of product type name to database. */
     public Boolean isProductTypeNameExist(String name){
-        Boolean isExist = proProductTypeEntityService.isProductTypeExist(name);
+        name = name.toUpperCase(Locale.ROOT);
+        Boolean isExist = proProductTypeEntityService.isProductTypeNameExist(name);
         if(!isExist){
             return true;
         }else{
@@ -50,6 +57,7 @@ public class ProProductTypeService {
         }
     }
 
+    /* Validation process about tax rate is negative or not. */
     public Boolean validationOfTaxRate(BigDecimal taxRate) {
         if(taxRate.compareTo(BigDecimal.ZERO) > 0){
             return true;

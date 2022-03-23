@@ -26,7 +26,6 @@ public class GenCustomizedResponseEntityExceptionHandler extends ResponseEntityE
 
         GenExceptionResponse genExceptionResponse =  new GenExceptionResponse(errorDate, message, description);
         RestResponse<GenExceptionResponse> generalResponse = RestResponse.error(genExceptionResponse);
-        generalResponse.setMessage(message);
 
         return new ResponseEntity<>(generalResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -39,7 +38,6 @@ public class GenCustomizedResponseEntityExceptionHandler extends ResponseEntityE
 
         GenExceptionResponse genExceptionResponse = new GenExceptionResponse(errorDate, message, detailMessage);
         RestResponse<GenExceptionResponse> generalResponse = RestResponse.error(genExceptionResponse);
-        generalResponse.setMessage(message);
 
         return new ResponseEntity<>(generalResponse, HttpStatus.NOT_ACCEPTABLE);
     }
@@ -52,7 +50,6 @@ public class GenCustomizedResponseEntityExceptionHandler extends ResponseEntityE
 
         GenExceptionResponse genExceptionResponse = new GenExceptionResponse(errorDate, message, detailMessage);
         RestResponse<GenExceptionResponse> generalResponse = RestResponse.error(genExceptionResponse);
-        generalResponse.setMessage(message);
 
         return new ResponseEntity<>(generalResponse, HttpStatus.CONFLICT);
     }
@@ -65,7 +62,6 @@ public class GenCustomizedResponseEntityExceptionHandler extends ResponseEntityE
 
         GenExceptionResponse genExceptionResponse = new GenExceptionResponse(errorDate, message, detailMessage);
         RestResponse<GenExceptionResponse> generalResponse = RestResponse.error(genExceptionResponse);
-        generalResponse.setMessage(message);
 
         return new ResponseEntity<>(generalResponse, HttpStatus.CONFLICT);
     }
@@ -78,7 +74,6 @@ public class GenCustomizedResponseEntityExceptionHandler extends ResponseEntityE
 
         GenExceptionResponse genExceptionResponse = new GenExceptionResponse(errorDate, message, detailMessage);
         RestResponse<GenExceptionResponse> generalResponse = RestResponse.error(genExceptionResponse);
-        generalResponse.setMessage(message);
 
         return new ResponseEntity<>(generalResponse, HttpStatus.NOT_FOUND);
     }
@@ -99,11 +94,6 @@ public class GenCustomizedResponseEntityExceptionHandler extends ResponseEntityE
         }
 
         RestResponse<GenExceptionResponse> generalResponse = RestResponse.error(genExceptionResponse);
-        if (ex.getGenericErrorMessage() == null){
-            generalResponse.setMessage(ex.getBaseErrorMessage().getDetailMessage());
-        }else{
-            generalResponse.setMessage(genExceptionResponse.getMessage());
-        }
 
         return new ResponseEntity<>(generalResponse, HttpStatus.NOT_FOUND);
     }
@@ -116,7 +106,6 @@ public class GenCustomizedResponseEntityExceptionHandler extends ResponseEntityE
 
         GenExceptionResponse genExceptionResponse = new GenExceptionResponse(errorDate, message, detailMessage);
         RestResponse<GenExceptionResponse> generalResponse = RestResponse.error(genExceptionResponse);
-        generalResponse.setMessage(message);
 
         return new ResponseEntity<>(generalResponse, HttpStatus.BAD_REQUEST);
     }

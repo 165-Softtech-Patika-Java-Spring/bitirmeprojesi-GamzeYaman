@@ -54,9 +54,8 @@ class ProProductTypeControllerTest extends BaseTest {
         assertTrue(isSuccess);
     }
 
-    //TODO: rename method
     @Test
-    void shouldUpdateKdvRateOfProductType() throws Exception {
+    void shouldUpdateTaxRateOfProductType() throws Exception {
         MvcResult result = mockMvc.perform(
                 patch(BASE_PATH+ "?productTypeName=Food&taxRate=8").content("").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();

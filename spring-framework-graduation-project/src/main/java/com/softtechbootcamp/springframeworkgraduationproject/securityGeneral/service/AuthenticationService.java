@@ -25,6 +25,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenGenerator jwtTokenGenerator;
 
+    /* User is saved with this method. */
     public UsUserDto register(UsUserSaveDto usUserSaveDto) {
         UsUserDto usUserDto = usUserService.saveUser(usUserSaveDto);
         return usUserDto;
@@ -40,17 +41,6 @@ public class AuthenticationService {
         return bearer + token;
     }
 
-    public UsUser getCurrentUser() {
-
-       JwtUserDetails jwtUserDetails = getCurrentJwtUserDetails();
-
-        UsUser usUser = null;
-        if (jwtUserDetails != null){
-            usUser = usUserEntityService.getIdWithControl(jwtUserDetails.getId());
-        }
-
-       return usUser;
-    }
 
     public Long getCurrentUserId(){
         JwtUserDetails jwtUserDetails = getCurrentJwtUserDetails();
@@ -61,6 +51,7 @@ public class AuthenticationService {
         }
         return jwtUserId;
     }
+
     private JwtUserDetails getCurrentJwtUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

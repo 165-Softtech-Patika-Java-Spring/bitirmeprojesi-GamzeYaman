@@ -18,6 +18,7 @@ public class UsUserService {
     private final UsUserEntityService usUserEntityService;
     private final PasswordEncoder passwordEncoder;
 
+    /* User is saved with name, surname, username and password. User cannot be saved with same username, so it has to be unique.*/
     public UsUserDto saveUser(UsUserSaveDto usUserSaveDto){
         isUsernameExist(usUserSaveDto.getUsername());
         UsUser usUser = UsUserMapperConverter.INSTANCE.convertToUsUserFromUsUserSaveDto(usUserSaveDto);
@@ -45,9 +46,9 @@ public class UsUserService {
         return usUserDtoUpdate;
     }
 
-    public boolean isUsernameExist(String username){
+    /* Validation about username is taken or not? */
+    private boolean isUsernameExist(String username){
         Boolean isExist = usUserEntityService.isUsernameExist(username);
-
         if(!isExist){
             return true;
         }else{

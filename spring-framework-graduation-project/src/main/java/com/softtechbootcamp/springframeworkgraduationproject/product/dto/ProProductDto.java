@@ -12,7 +12,7 @@ public class ProProductDto {
     private String productName;
     private BigDecimal basicProductPrice;
     private Long productTypeId;
-    private BigDecimal taxRate;
+    private BigDecimal taxRateResult;
     private BigDecimal productPriceWithTax;
 
 

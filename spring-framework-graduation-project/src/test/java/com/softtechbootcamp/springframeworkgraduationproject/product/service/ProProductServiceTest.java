@@ -3,12 +3,11 @@ package com.softtechbootcamp.springframeworkgraduationproject.product.service;
 import com.softtechbootcamp.springframeworkgraduationproject.general.exceptions.ItemNotFoundExceptions;
 import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductDto;
 import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductSaveDto;
+import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductUpdateDto;
 import com.softtechbootcamp.springframeworkgraduationproject.product.entity.ProProduct;
 import com.softtechbootcamp.springframeworkgraduationproject.product.service.entityService.ProProductEntityService;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.entity.ProProductType;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.service.entityService.ProProductTypeEntityService;
-import com.softtechbootcamp.springframeworkgraduationproject.user.dto.UsUserDto;
-import com.softtechbootcamp.springframeworkgraduationproject.user.entity.UsUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -75,7 +74,7 @@ class ProProductServiceTest {
 
         ProProduct proProduct = mock(ProProduct.class);
         when(proProduct.getId()).thenReturn(id);
-        when(proProduct.getTaxRate()).thenReturn(taxRate);
+        when(proProduct.getTaxRateResult()).thenReturn(taxRate);
 
         when(proProductEntityService.save(any())).thenReturn(proProduct);
 
@@ -119,7 +118,7 @@ class ProProductServiceTest {
     void shouldUpdateProduct() {
         Long id = 3L;
 
-        ProProductDto proProductDto = mock(ProProductDto.class);
+        ProProductUpdateDto proProductUpdateDto = mock(ProProductUpdateDto.class);
         ProProduct proProduct = mock(ProProduct.class);
         when(proProduct.getId()).thenReturn(id);
 
@@ -129,7 +128,7 @@ class ProProductServiceTest {
         when(proProductEntityService.save(any())).thenReturn(proProduct);
 
 
-        ProProductDto result = proProductService.updateProduct(proProductDto);
+        ProProductDto result = proProductService.updateProduct(proProductUpdateDto);
 
         assertEquals(id, result.getId());
 
@@ -138,10 +137,10 @@ class ProProductServiceTest {
 
     @Test
     void shouldNotUpdateProductDoesNotExist() {
-        ProProductDto proProductDto = mock(ProProductDto.class);
+        ProProductUpdateDto proProductUpdateDto = mock(ProProductUpdateDto.class);
 
         when(proProductEntityService.existById(any())).thenThrow(ItemNotFoundExceptions.class);
-        ItemNotFoundExceptions itemNotFoundExceptions = assertThrows(ItemNotFoundExceptions.class, ()-> proProductService.updateProduct(proProductDto));
+        ItemNotFoundExceptions itemNotFoundExceptions = assertThrows(ItemNotFoundExceptions.class, ()-> proProductService.updateProduct(proProductUpdateDto));
 
         verify(proProductEntityService).existById(anyLong());
     }
@@ -171,13 +170,13 @@ class ProProductServiceTest {
         List<ProProduct> proProductList = new ArrayList<>();
         proProductList.add(proProduct);
 
-        when(proProductEntityService.findAllByProductPricesBetween(firstPrice, secondPrice)).thenReturn(proProductList);
+        when(proProductEntityService.findAllByProductBetweenTwoPrices(firstPrice, secondPrice)).thenReturn(proProductList);
 
         ProProductDto proProductDto = mock(ProProductDto.class);
         List<ProProductDto> proProductDtoList = new ArrayList<>();
         proProductDtoList.add(proProductDto);
 
-        List<ProProductDto> result = proProductService.findAllProducts(firstPrice, secondPrice);
+        List<ProProductDto> result = proProductService.findAllProductsBetweenTwoPrices(firstPrice, secondPrice);
         assertEquals(proProductList.size(), result.size());
     }
 

@@ -41,7 +41,7 @@ class ProProductTypeServiceTest {
     }
 
     @Test
-    void shouldUpdateKdvRateOfProductType() {
+    void shouldUpdateTaxRateOfProductType() {
         String productTypeName =  "Food";
         BigDecimal taxRate = BigDecimal.valueOf(6);
 
@@ -50,7 +50,7 @@ class ProProductTypeServiceTest {
         when(proProductType.getTaxRate()).thenReturn(taxRate);
         when(proProductTypeEntityService.update(productTypeName, taxRate)).thenReturn(proProductType);
 
-        ProProductTypeDto result = proProductTypeService.updateKdvRateOfProductType(proProductType.getProductTypeName(), proProductType.getTaxRate());
+        ProProductTypeDto result = proProductTypeService.updateTaxRateOfProductType(proProductType.getProductTypeName(), proProductType.getTaxRate());
 
         assertEquals(BigDecimal.valueOf(6), result.getTaxRate());
 

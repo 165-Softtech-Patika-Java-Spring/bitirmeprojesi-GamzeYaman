@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProProductEntityService extends BaseEntityService<ProProduct, ProProductDao> {
     private ProProductDao proProductDao;
+
     public ProProductEntityService(ProProductDao dao, ProProductDao proProductDao) {
         super(dao);
         this.proProductDao = proProductDao;
@@ -21,7 +21,7 @@ public class ProProductEntityService extends BaseEntityService<ProProduct, ProPr
         return proProductDao.findByProductTypeId(id);
     }
 
-    public List<ProProduct> findAllByProductPricesBetween(BigDecimal firstPrice, BigDecimal secondPrice){
+    public List<ProProduct> findAllByProductBetweenTwoPrices(BigDecimal firstPrice, BigDecimal secondPrice){
         return proProductDao.findAllByProductPriceWithTaxBetween(firstPrice, secondPrice);
     }
 

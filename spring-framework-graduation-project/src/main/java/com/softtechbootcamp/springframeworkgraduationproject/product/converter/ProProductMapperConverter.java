@@ -2,6 +2,7 @@ package com.softtechbootcamp.springframeworkgraduationproject.product.converter;
 
 import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductDto;
 import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductSaveDto;
+import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductUpdateDto;
 import com.softtechbootcamp.springframeworkgraduationproject.product.entity.ProProduct;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -17,5 +18,5 @@ public interface ProProductMapperConverter {
     ProProduct convertToProProductFromProProductDto(ProProductDto proProductDto);
     ProProductDto convertToProProductDtoFromProProduct(ProProduct proProduct);
     List<ProProductDto> convertToProProductDtoListFromProProductList(List<ProProduct> proProduct);
-
+    ProProduct convertToProProductFromProProductUpdateDto(ProProductUpdateDto proProductUpdateDto);
 }

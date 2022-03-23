@@ -16,7 +16,6 @@ public class JwtUserDetails implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    //başkası constructor oluşturmasın, singletion
     private JwtUserDetails(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities ){
         this.id =id;
         this.username = username;

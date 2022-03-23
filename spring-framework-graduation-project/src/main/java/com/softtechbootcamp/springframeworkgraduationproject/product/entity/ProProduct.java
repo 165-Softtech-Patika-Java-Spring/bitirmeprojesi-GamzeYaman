@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "PROPRODUCT")
+@Table(name = "PRO_PRODUCT")
 @Getter
 @Setter
 public class ProProduct extends BaseEntity {
@@ -24,13 +24,13 @@ public class ProProduct extends BaseEntity {
     @Column(name = "BASIC_PRODUCT_PRICE", precision = 19, scale = 2, nullable = false)
     private BigDecimal basicProductPrice;
 
-    @Column(name = "ID_PRODUCT_TYPE")
+    @Column(name = "ID_PRODUCT_TYPE", nullable = false)
     private Long productTypeId;
 
-    @Column(name = "TAX_RATE", precision = 19, scale = 4)
-    private BigDecimal taxRate;
+    @Column(name = "TAX_RATE_RESULT", precision = 19, scale = 4, nullable = false)
+    private BigDecimal taxRateResult;
 
-    @Column(name = "PRODUCT_PRICE_WITH_TAX", precision = 19, scale = 2)
+    @Column(name = "PRODUCT_PRICE_WITH_TAX", precision = 19, scale = 2, nullable = false)
     private BigDecimal productPriceWithTax;
 
 

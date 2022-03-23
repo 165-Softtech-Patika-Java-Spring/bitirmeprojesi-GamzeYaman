@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "USUSER")
+@Table(name = "US_USER")
 @Getter
 @Setter
 public class UsUser extends BaseEntity {

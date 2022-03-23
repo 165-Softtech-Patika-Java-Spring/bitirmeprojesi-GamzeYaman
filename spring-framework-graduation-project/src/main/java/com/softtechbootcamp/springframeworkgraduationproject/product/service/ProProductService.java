@@ -1,12 +1,12 @@
 package com.softtechbootcamp.springframeworkgraduationproject.product.service;
 
 import com.softtechbootcamp.springframeworkgraduationproject.general.exceptionEnums.GeneralErrorMessage;
-import com.softtechbootcamp.springframeworkgraduationproject.general.exceptions.BusinessExceptions;
 import com.softtechbootcamp.springframeworkgraduationproject.general.exceptions.InvalidInformationExceptions;
 import com.softtechbootcamp.springframeworkgraduationproject.general.exceptions.ItemNotFoundExceptions;
 import com.softtechbootcamp.springframeworkgraduationproject.product.converter.ProProductMapperConverter;
 import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductDto;
 import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductSaveDto;
+import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductUpdateDto;
 import com.softtechbootcamp.springframeworkgraduationproject.product.entity.ProProduct;
 import com.softtechbootcamp.springframeworkgraduationproject.product.service.entityService.ProProductEntityService;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.entity.ProProductType;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,33 +30,19 @@ public class ProProductService {
         return proProductDtoList;
     }
 
+    /* If product price is valid, product can be saved. */
     public ProProductDto saveProduct(ProProductSaveDto proProductSaveDto){
-        ProProduct proProduct = ProProductMapperConverter.INSTANCE.convertToProProductFromProProductSaveDto(proProductSaveDto);
         validationOfProductPrice(proProductSaveDto.getBasicProductPrice());
-        proProduct.setProductPriceWithTax(calculatePriceWithKdvTax(proProductSaveDto));
-        proProduct.setTaxRate(proProduct.getProductPriceWithTax().subtract(proProduct.getBasicProductPrice()));
+        ProProduct proProduct = ProProductMapperConverter.INSTANCE.convertToProProductFromProProductSaveDto(proProductSaveDto);
+        proProduct.setProductPriceWithTax(calculatePriceWithTax(proProductSaveDto.getProductTypeId(), proProductSaveDto.getBasicProductPrice()));
+        proProduct.setTaxRateResult(proProduct.getProductPriceWithTax().subtract(proProduct.getBasicProductPrice()));
         proProduct = proProductEntityService.save(proProduct);
 
         ProProductDto proProductDto = ProProductMapperConverter.INSTANCE.convertToProProductDtoFromProProduct(proProduct);
         return proProductDto;
     }
 
-    public BigDecimal calculatePriceWithKdvTax(ProProductSaveDto proProductSaveDto){
-
-        Long productTypeId = proProductSaveDto.getProductTypeId();
-        BigDecimal percentage = BigDecimal.valueOf(100);
-
-        ProProductType proProductType = proProductTypeEntityService.getIdWithControl(productTypeId);
-
-        BigDecimal kdvTax = proProductType.getTaxRate();
-        BigDecimal productPrice = proProductSaveDto.getBasicProductPrice();
-
-        BigDecimal taxCalculation = productPrice.multiply((kdvTax.divide(percentage)));
-        BigDecimal newProductPrice = productPrice.add(taxCalculation);
-
-        return newProductPrice;
-    }
-
+    /* Getting all products according to product type. */
     public List<ProProductDto> findByProductTypeId(Long id){
         List<ProProduct> proProductList = proProductEntityService.findByProductTypeId(id);
 
@@ -70,14 +55,20 @@ public class ProProductService {
         return proProductDtoList;
     }
 
+    public List<ProProductDto> findAllProductsBetweenTwoPrices(BigDecimal firstPrice, BigDecimal secondPrice){
+        List<ProProduct> proProductList = proProductEntityService.findAllByProductBetweenTwoPrices(firstPrice, secondPrice);
+        List<ProProductDto> proProductDtoList = ProProductMapperConverter.INSTANCE.convertToProProductDtoListFromProProductList(proProductList);
+        return proProductDtoList;
+    }
 
-    public ProProductDto updateProduct(ProProductDto proProductDto){
-        Long id = proProductDto.getId();
+    public ProProductDto updateProduct(ProProductUpdateDto proProductUpdateDto){
+        Long id = proProductUpdateDto.getId();
         Boolean isProductExist = proProductEntityService.existById(id);
 
         ProProduct proProduct;
         if(isProductExist){
-            proProduct = ProProductMapperConverter.INSTANCE.convertToProProductFromProProductDto(proProductDto);
+            proProduct = ProProductMapperConverter.INSTANCE.convertToProProductFromProProductUpdateDto(proProductUpdateDto);
+            updateCurrentProductPriceWithTax(proProduct, proProductUpdateDto.getBasicProductPrice());
             proProduct = proProductEntityService.save(proProduct);
         }else{
             throw new ItemNotFoundExceptions(GeneralErrorMessage.PRODUCT_NOT_FOUND);
@@ -91,6 +82,7 @@ public class ProProductService {
         validationOfProductPrice(productPrice);
         ProProduct proProduct = proProductEntityService.getIdWithControl(id);
         proProduct.setBasicProductPrice(productPrice);
+        updateCurrentProductPriceWithTax(proProduct, productPrice);
         proProduct = proProductEntityService.save(proProduct);
 
         ProProductDto proProductDto = ProProductMapperConverter.INSTANCE.convertToProProductDtoFromProProduct(proProduct);
@@ -102,13 +94,30 @@ public class ProProductService {
         proProductEntityService.delete(proProduct);
     }
 
-    //TODO:rename method
-    public List<ProProductDto> findAllProducts(BigDecimal firstPrice, BigDecimal secondPrice){
-       List<ProProduct> proProductList = proProductEntityService.findAllByProductPricesBetween(firstPrice, secondPrice);
-       List<ProProductDto> proProductDtoList = ProProductMapperConverter.INSTANCE.convertToProProductDtoListFromProProductList(proProductList);
-       return proProductDtoList;
+    private void updateCurrentProductPriceWithTax(ProProduct proProduct, BigDecimal price){
+        BigDecimal newPrice = calculatePriceWithTax(proProduct.getProductTypeId(), price);
+        proProduct.setProductPriceWithTax(newPrice);
+        proProduct.setTaxRateResult(proProduct.getProductPriceWithTax().subtract(proProduct.getBasicProductPrice()));
+        proProduct = proProductEntityService.save(proProduct);
     }
 
+    private BigDecimal calculatePriceWithTax(Long id, BigDecimal price){
+
+        Long productTypeId = id;
+        BigDecimal percentage = BigDecimal.valueOf(100);
+
+        ProProductType proProductType = proProductTypeEntityService.getIdWithControl(productTypeId);
+
+        BigDecimal tax = proProductType.getTaxRate();
+        BigDecimal productPrice = price;
+
+        BigDecimal taxCalculation = productPrice.multiply(tax.divide(percentage));
+        BigDecimal newProductPriceWithTax = productPrice.add(taxCalculation);
+
+        return newProductPriceWithTax;
+    }
+
+    /* Validation process about price cannot be negative. */
     public boolean validationOfProductPrice(BigDecimal productPrice) {
         if(productPrice.compareTo(BigDecimal.ZERO) > 0){
             return true;
@@ -116,5 +125,7 @@ public class ProProductService {
             throw new InvalidInformationExceptions(GeneralErrorMessage.PRICE_NOT_BE_NEGATIVE);
         }
     }
+
+
 
 }
