@@ -1,10 +1,10 @@
 package com.softtechbootcamp.springframeworkgraduationproject.productType.controller;
 
 import com.softtechbootcamp.springframeworkgraduationproject.general.dto.RestResponse;
+import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductDetailsDto;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductTypeDto;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductTypeSaveDto;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.service.ProProductTypeService;
-import com.softtechbootcamp.springframeworkgraduationproject.user.dto.UsUserSaveDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -53,14 +53,6 @@ public class ProProductTypeController {
        return ResponseEntity.ok(RestResponse.of(proProductTypeDtoSave));
     }
 
-    @Operation(
-            tags = "Product Type Controller"
-    )
-    @GetMapping("/product-type-details")
-    public ResponseEntity findProductsByProductTypeId(){
-        List<Object> proProductTypeDetails = proProductTypeService.getProductTypeDetails();
-        return ResponseEntity.ok(RestResponse.of(proProductTypeDetails));
-    }
 
     @Operation(
             tags = "Product Type Controller",
@@ -70,5 +62,15 @@ public class ProProductTypeController {
     public ResponseEntity updateTaxRateOfProductType(@RequestParam String productTypeName, @RequestParam BigDecimal taxRate){
         ProProductTypeDto proProductTypeDto = proProductTypeService.updateTaxRateOfProductType(productTypeName, taxRate);
         return ResponseEntity.ok(RestResponse.of(proProductTypeDto));
+    }
+
+    @Operation(
+            tags = "Product Type Controller",
+            description = "List some summarized informations about product for each productType "
+    )
+    @GetMapping("/details")
+    public ResponseEntity getProductDetails(){
+        List<ProProductDetailsDto> proProductDetailsDto = proProductTypeService.getProductTypeDetails();
+        return ResponseEntity.ok(RestResponse.of(proProductDetailsDto));
     }
 }

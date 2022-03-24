@@ -4,6 +4,7 @@ import com.softtechbootcamp.springframeworkgraduationproject.general.exceptionEn
 import com.softtechbootcamp.springframeworkgraduationproject.general.exceptions.ItemNotFoundExceptions;
 import com.softtechbootcamp.springframeworkgraduationproject.general.service.BaseEntityService;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.dao.ProProductTypeDao;
+import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductDetailsDto;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.entity.ProProductType;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,14 @@ public class ProProductTypeEntityService extends BaseEntityService<ProProductTyp
         this.proProductTypeDao = proProductTypeDao;
     }
 
-    public List<Object> getProductTypeDetails(){
-        return proProductTypeDao.getProductTypeDetails();
-    }
-
-
     public ProProductType update(String productTypeName, BigDecimal taxRate){
         ProProductType proProductType = getNameWithControl(productTypeName);
         proProductType.setTaxRate(taxRate);
         return proProductTypeDao.save(proProductType);
+    }
+
+    public List<ProProductDetailsDto> getProductTypeDetails(){
+        return proProductTypeDao.getProductDetails();
     }
 
     /* Product type name is unique, so searching can be also made by product type name. Name was converted to uppercase because of saving style of product type name to database. */

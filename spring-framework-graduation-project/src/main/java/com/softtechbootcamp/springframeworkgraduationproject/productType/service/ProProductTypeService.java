@@ -3,7 +3,12 @@ package com.softtechbootcamp.springframeworkgraduationproject.productType.servic
 import com.softtechbootcamp.springframeworkgraduationproject.general.exceptionEnums.GeneralErrorMessage;
 import com.softtechbootcamp.springframeworkgraduationproject.general.exceptions.DuplicateException;
 import com.softtechbootcamp.springframeworkgraduationproject.general.exceptions.InvalidInformationExceptions;
+import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductDto;
+import com.softtechbootcamp.springframeworkgraduationproject.product.entity.ProProduct;
+import com.softtechbootcamp.springframeworkgraduationproject.product.service.ProProductService;
+import com.softtechbootcamp.springframeworkgraduationproject.product.service.entityService.ProProductEntityService;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.converter.ProProductTypeMapperConverter;
+import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductDetailsDto;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductTypeDto;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.dto.ProProductTypeSaveDto;
 import com.softtechbootcamp.springframeworkgraduationproject.productType.entity.ProProductType;
@@ -19,6 +24,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class ProProductTypeService {
     private final ProProductTypeEntityService proProductTypeEntityService;
+    private final ProProductService proProductService;
 
     /* Product type is saved with type name and tax rate. Product type cannot be saved with same type name, so it has to be unique.*/
     public ProProductTypeDto saveProductType(ProProductTypeSaveDto proProductTypeSaveDto){
@@ -41,9 +47,10 @@ public class ProProductTypeService {
         return proProductTypeDto;
     }
 
-    public List<Object> getProductTypeDetails(){
-        List<Object> proProductDetails = proProductTypeEntityService.getProductTypeDetails();
-        return proProductDetails;
+    /* Getting some summarized information about product for each productType. */
+    public List<ProProductDetailsDto> getProductTypeDetails(){
+        List<ProProductDetailsDto> proProductDetailsDto = proProductTypeEntityService.getProductTypeDetails();
+        return proProductDetailsDto;
     }
 
     /* Validation process about product type name is used or not. Name was converted to uppercase because of saving style of product type name to database. */

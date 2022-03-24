@@ -3,6 +3,7 @@ package com.softtechbootcamp.springframeworkgraduationproject.product.entity;
 import com.softtechbootcamp.springframeworkgraduationproject.general.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

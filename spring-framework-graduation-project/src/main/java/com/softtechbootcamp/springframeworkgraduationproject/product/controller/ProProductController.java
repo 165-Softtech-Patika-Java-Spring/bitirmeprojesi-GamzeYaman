@@ -5,7 +5,6 @@ import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProd
 import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductSaveDto;
 import com.softtechbootcamp.springframeworkgraduationproject.product.dto.ProProductUpdateDto;
 import com.softtechbootcamp.springframeworkgraduationproject.product.service.ProProductService;
-import com.softtechbootcamp.springframeworkgraduationproject.user.dto.UsUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -137,4 +136,5 @@ public class ProProductController {
         proProductService.deleteProduct(id);
         return ResponseEntity.ok(RestResponse.empty());
     }
+
 }
