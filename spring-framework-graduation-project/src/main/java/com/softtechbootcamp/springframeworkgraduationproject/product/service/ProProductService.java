@@ -14,11 +14,13 @@ import com.softtechbootcamp.springframeworkgraduationproject.productType.service
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProProductService {
     private final ProProductEntityService proProductEntityService;
     private final ProProductTypeEntityService proProductTypeEntityService;
@@ -56,6 +58,7 @@ public class ProProductService {
     }
 
     public List<ProProductDto> findAllProductsBetweenTwoPrices(BigDecimal firstPrice, BigDecimal secondPrice){
+        validationOfTwoPrices(firstPrice, secondPrice);
         List<ProProduct> proProductList = proProductEntityService.findAllByProductBetweenTwoPrices(firstPrice, secondPrice);
         List<ProProductDto> proProductDtoList = ProProductMapperConverter.INSTANCE.convertToProProductDtoListFromProProductList(proProductList);
         return proProductDtoList;
@@ -123,6 +126,15 @@ public class ProProductService {
             return true;
         }else{
             throw new InvalidInformationExceptions(GeneralErrorMessage.PRICE_NOT_BE_NEGATIVE);
+        }
+    }
+
+    /* First price must be litter than second one. */
+    private boolean validationOfTwoPrices(BigDecimal firstPrice, BigDecimal secondPrice){
+        if(firstPrice.compareTo(secondPrice) < secondPrice.compareTo(firstPrice)){
+            return true;
+        }else{
+           throw new InvalidInformationExceptions(GeneralErrorMessage.COMPARE_TWO_PRICES);
         }
     }
 }

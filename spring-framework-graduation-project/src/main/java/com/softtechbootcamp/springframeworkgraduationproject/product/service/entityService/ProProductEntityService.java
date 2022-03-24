@@ -5,10 +5,12 @@ import com.softtechbootcamp.springframeworkgraduationproject.product.dao.ProProd
 import com.softtechbootcamp.springframeworkgraduationproject.product.entity.ProProduct;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProProductEntityService extends BaseEntityService<ProProduct, ProProductDao> {
     private ProProductDao proProductDao;
 

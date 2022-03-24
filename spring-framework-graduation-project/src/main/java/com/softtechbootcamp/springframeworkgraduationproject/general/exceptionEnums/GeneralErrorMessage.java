@@ -12,6 +12,7 @@ public enum GeneralErrorMessage implements BaseErrorMessage{
     USERNAME_ERROR("Cannot be same username! ", "This username has been used. Write another username!"),
     PRICE_NOT_BE_NEGATIVE("Price cannot be negative!", "Price that was entered is little than zero."),
     TAX_RATE_NOT_BE_NEGATIVE("Tax rate cannot be negative!", "Tax rate that was entered is little than zero."),
+    COMPARE_TWO_PRICES("First price error!", "First price must be little than second price."),
     ;
 
     private String errorMessage;
